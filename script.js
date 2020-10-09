@@ -1,10 +1,3 @@
-/*
- * Tic Tac Toe
- *
- * A Tic Tac Toe game in HTML/JavaScript/CSS.
- *
- * @author: Vasanth Krishnamoorthy
- */
 const N_SIZE = 3, 
     EMPTY = "&nbsp;";
 
@@ -12,7 +5,7 @@ var boxes = [],
     turn = "X",
     score,
     moves;
-
+var winCheck = false;
 /*
 * Initializes the Tic Tac Toe board and starts the game.
 */
@@ -42,6 +35,7 @@ function init() {
 
             cell.identifier = identifier;
             // if turn = 0 may danh
+            
             cell.addEventListener("click", set);
 
             row.appendChild(cell);
@@ -53,6 +47,7 @@ function init() {
 
     document.getElementById("tictactoe").appendChild(board);
     startNewGame();
+    
 }
 
 /*
@@ -145,8 +140,9 @@ function mSet() {
 
     const nodeList = [];
 
-    for (let a = 0; a < cia2s.length; a++ ){                
-        
+    for (let a = 0; a < cia2s.length; a++ ){   
+        console.log("===========================")             
+        console.log("step 1")
         const clone = cloneCells(cellList);
         clone[cia2s[a][0]][cia2s[a][1]] = "O";
         displayBox(clone);
@@ -158,44 +154,46 @@ function mSet() {
         nodeList.push(nodeValue(clone, cloneCia2s));
         
         
-        /*
-        for(let b = 0; b < cloneCia2s.length; b++) {
-            let maxPosibleWinPaths = 0;
-            let minPosibleWinPaths = 0;            
-            let clone2 = cloneCells(clone);
+        
+        // for(let b = 0; b < cloneCia2s.length; b++) {
+        //     let maxPosibleWinPaths = 0;
+        //     let minPosibleWinPaths = 0;            
+        //     let clone2 = cloneCells(clone);
 
-            clone2[cloneCia2s[b][0]][cloneCia2s[b][1]] = "X";
+        //     clone2[cloneCia2s[b][0]][cloneCia2s[b][1]] = "X";
 
-            displayBox(clone2);
+        //     displayBox(clone2);
 
-            maxPosibleWinPaths += rCheck(clone2, "X");
-            console.log(maxPosibleWinPaths);
-            maxPosibleWinPaths += cCheck(clone2, "X");
-            console.log(maxPosibleWinPaths);
-            maxPosibleWinPaths += dCheck(clone2, "X");
-            console.log(maxPosibleWinPaths);
+        //     maxPosibleWinPaths += rCheck(clone2, "X");
+        //     console.log(maxPosibleWinPaths);
+        //     maxPosibleWinPaths += cCheck(clone2, "X");
+        //     console.log(maxPosibleWinPaths);
+        //     maxPosibleWinPaths += dCheck(clone2, "X");
+        //     console.log(maxPosibleWinPaths);
 
-            minPosibleWinPaths += rCheck(clone2, "O");
-            console.log(minPosibleWinPaths);
-            minPosibleWinPaths += cCheck(clone2, "O");
-            console.log(minPosibleWinPaths);
-            minPosibleWinPaths += dCheck(clone2, "O");
-            console.log(minPosibleWinPaths);
-            console.log(maxPosibleWinPaths - minPosibleWinPaths);
-            console.log("============");
+        //     minPosibleWinPaths += rCheck(clone2, "O");
+        //     console.log(minPosibleWinPaths);
+        //     minPosibleWinPaths += cCheck(clone2, "O");
+        //     console.log(minPosibleWinPaths);
+        //     minPosibleWinPaths += dCheck(clone2, "O");
+        //     console.log(minPosibleWinPaths);
+        //     console.log(maxPosibleWinPaths - minPosibleWinPaths);
+        //     console.log("============");
 
-            clone2 = [...clone];
-        }
+        //     clone2 = [...clone];
+        // }
 
-        */
+        
         
 
     }
-
-    let maxP = nodeList.reduce((iMax, x, i, arr) => 
+    console.log("nodeList", nodeList)
+    let maxP = nodeList.reduce((iMax, x, i, arr) =>       
         x > arr[iMax] ? i : iMax, 0
     );
+    // let maxP = nodeList.indexOf(Math.min.apply(Math, nodeList));
     
+    console.log("cia2s", cia2s)
     console.log("maxP:", maxP);
     console.log("nodeValue:", nodeList[maxP]);
     console.log("p:", cia2s[maxP]);
@@ -206,7 +204,7 @@ function mSet() {
 
 function nodeValue(clone, cloneCia2s) {
     const arr = [];
-
+    console.log("step 2")
     for(let b = 0; b < cloneCia2s.length; b++) {
         let maxPosibleWinPaths = 0;
         let minPosibleWinPaths = 0;            
@@ -216,18 +214,18 @@ function nodeValue(clone, cloneCia2s) {
 
         displayBox(clone2);
 
-        maxPosibleWinPaths += rCheck(clone2, "X");
+        maxPosibleWinPaths += rCheck(clone2, "O");
         // console.log(maxPosibleWinPaths);
-        maxPosibleWinPaths += cCheck(clone2, "X");
+        maxPosibleWinPaths += cCheck(clone2, "O");
         // console.log(maxPosibleWinPaths);
-        maxPosibleWinPaths += dCheck(clone2, "X");
+        maxPosibleWinPaths += dCheck(clone2, "O");
         // console.log(maxPosibleWinPaths);
 
-        minPosibleWinPaths += rCheck(clone2, "O");
+        minPosibleWinPaths += rCheck(clone2, "X");
         // console.log(minPosibleWinPaths);
-        minPosibleWinPaths += cCheck(clone2, "O");
+        minPosibleWinPaths += cCheck(clone2, "X");
         // console.log(minPosibleWinPaths);
-        minPosibleWinPaths += dCheck(clone2, "O");
+        minPosibleWinPaths += dCheck(clone2, "X");
         // console.log(minPosibleWinPaths);
         console.log(maxPosibleWinPaths - minPosibleWinPaths);
         console.log("============");
@@ -237,7 +235,7 @@ function nodeValue(clone, cloneCia2s) {
         arr.push(maxPosibleWinPaths - minPosibleWinPaths);
     }
 
-    return Math.max.apply(Math, arr);
+    return Math.min.apply(Math, arr);
 }
 
 function getCellsIsAble2Set(arr) {
@@ -279,9 +277,12 @@ function dCheck(arr, player) {
     let flag = 0;
     for (let i = 0, j = 0; i < N_SIZE; i++, j++) {       
         if (arr[i][j] === player){
-            flag = 1;
+            flag += 1;
         }      
-    }    
+    }
+    if (flag === 3) {
+      totalPaths += 99;
+    }
     if (!flag) {
         totalPaths += 1;
     }
@@ -289,8 +290,11 @@ function dCheck(arr, player) {
     flag = 0;
     for (let i = N_SIZE - 1, j = 0; i >= 0; i--, j++) {                
         if (arr[i][j] === player){
-            flag = 1;
+            flag += 1;
         }        
+    }
+    if (flag === 3) {
+      totalPaths += 99;
     }
     if (!flag) {
         totalPaths += 1;
@@ -306,10 +310,14 @@ function rCheck(arr, player) {
         let flag = 0;
         for (let j = 0; j < N_SIZE; j++) {
             if (arr[i][j] === player) {
-                flag = 1;
+                flag += 1;
             }
         }
         
+        if (flag === 3) {
+          totalPaths += 99;
+        }
+
         if (!flag) {
             totalPaths += 1;
         }
@@ -325,10 +333,12 @@ function cCheck(arr, player) {
         let flag = 0;
         for (let j = 0; j < N_SIZE ; j++) {
             if (arr[j][i] === player) {
-                flag = 1;
+                flag += 1;
             }
         }
-        
+        if (flag === 3) {
+          totalPaths += 99;
+        }
         if (!flag) {
             totalPaths += 1;
         }
